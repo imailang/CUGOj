@@ -1,0 +1,12 @@
+{
+    "SqlUsername": "cugoj",
+    "SqlPassword": "cugoj2022",
+    "SqlIP": "1.15.93.80",
+    "SqlPort": "3306",
+    "Database": "cugoj",
+    "CompileTimeLimit": "10000",
+    "CompileMemoryLimit": "128",
+    "Username": "cugoj",
+    "Password": "cugoj2022",
+    "ContainerName": "runc"
+}
