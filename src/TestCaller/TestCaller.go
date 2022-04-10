@@ -4,8 +4,8 @@ import (
 	properties "TMManager/src/Properties"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os/exec"
-	"strings"
 )
 
 type TestInfo struct {
@@ -20,17 +20,19 @@ type FileMap struct {
 	DesPath string
 }
 
-func Test(fileMaps []FileMap, judgerName string, args ...string) TestInfo {
-	fileMapCmd := MapFiles(fileMaps)
-	cmd := exec.Command("sh",
-		"-c",
-		fileMapCmd,
-		"cd ../img/TestMachine",
-		properties.GetAnyway("ContainerName")+" create "+judgerName,
-		strings.Join(args, " "),
+func Test(configPath, judgerName string, args ...string) TestInfo {
+	fmt.Println(properties.GetAnyway("ContainerName") + " run -b " + configPath + " " + judgerName)
+	cmd := exec.Command(properties.GetAnyway("ContainerName"),
+		"run",
+		"-b",
+		configPath,
+		judgerName,
 	)
 	cmd.Stdout = &bytes.Buffer{}
+	cmd.Stderr = &bytes.Buffer{}
 	err := cmd.Run()
+	fmt.Println(cmd.Stdout.(*bytes.Buffer).String())
+	fmt.Println(cmd.Stderr.(*bytes.Buffer).String())
 	if err != nil {
 		return TestInfo{
 			Statu:   "017",

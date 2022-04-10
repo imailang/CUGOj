@@ -8,5 +8,8 @@
     "CompileMemoryLimit": "128",
     "Username": "cugoj",
     "Password": "cugoj2022",
-    "ContainerName": "runc"
+    "ContainerName": "runc",
+    "MaxIdleConns": "10",
+    "MaxOpenConns": "1000",
+    "MaxLifeTime": "3600"
 }

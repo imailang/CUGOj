@@ -1,10 +1,13 @@
-package main
+package testermanagers
 
 import (
+	filetool "TMManager/src/FileTool"
 	queuetool "TMManager/src/QueueTool"
 	sqltool "TMManager/src/SqlTool"
-	testermanagers "TMManager/src/TesterManagers"
+	testcaller "TMManager/src/TestCaller"
+	"encoding/json"
 	"fmt"
+	"os"
 )
 
 type Thread interface {
@@ -12,13 +15,34 @@ type Thread interface {
 }
 
 type Manager struct {
-	Signal_kill bool
-	workSpace   string
+	Signal_kill  bool
+	WorkSpace    string
+	Name         string
+	BundleConfig testcaller.BundleConfig
 }
 
-func NewManager() *Manager {
+func NewManager(name string) *Manager {
+	fmt.Println(filetool.Home() + "img/config.json")
+	buf, err := filetool.ReadFile(filetool.Home() + "img/config.json")
+	if err != nil {
+		fmt.Printf("镜像文件丢失")
+		return nil
+	}
+	config := testcaller.BundleConfig{}
+	err = json.Unmarshal(buf, &config)
+	if err != nil {
+		fmt.Println("镜像配置文件存在错误")
+	}
+	filetool.Clear(filetool.Home() + "workspace/" + name)
+	err = os.Mkdir(filetool.Home()+"workspace/"+name+"/workspace", 0777)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return &Manager{
-		Signal_kill: false,
+		Signal_kill:  false,
+		WorkSpace:    filetool.Home() + "workspace/" + name + "/",
+		Name:         name,
+		BundleConfig: config,
 	}
 }
 
@@ -78,7 +102,7 @@ func (m *Manager) run() {
 			break
 		}
 		judge := sqltool.QueryJudge(string(msg.Body))
-		testermanagers.Run(&judge, m.workSpace)
+		Run(&judge, m)
 	}
 
 }

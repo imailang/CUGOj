@@ -1,6 +1,7 @@
 package properties
 
 import (
+	filetool "TMManager/src/FileTool"
 	"encoding/json"
 	"io/ioutil"
 	"strconv"
@@ -25,7 +26,7 @@ func (e Error) Error() string {
 var config = make(map[string]string)
 
 func LoadProperties() error {
-	buffer, err := ioutil.ReadFile("config.json")
+	buffer, err := ioutil.ReadFile(filetool.Home() + "config.json")
 	if err != nil {
 		return Error{
 			Info: "config.json文件不存在" + err.Error(),

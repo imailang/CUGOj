@@ -4,31 +4,39 @@ import (
 	"time"
 )
 
+type Problem_Description struct {
+	ID          uint   `gorm:"primaryKey"`             //题面编号
+	Markdown    bool   `gorm:"not null;default:false"` //是否存储MD文件，为true的时候在Description字段存储MD值，否则由以下六个字段共同组合
+	BackGround  string ``                              //题目背景
+	Description string ``                              //题目描述
+	Input       string ``                              //输入描述
+	Output      string ``                              //输出描述
+	Examples    string ``                              //题目样例，json格式，[{input: , output: ,descrption:},{input:, output: ,descrption:},...] ，允许有多个样例
+	Hint        string ``                              //题目提示
+	CaseFiles   string ``                              //测试数据文件名
+}
+
 type Problem struct {
-	ID               uint      `gorm:"primaryKey"`                     //题目编号
-	Judge_mode       byte      `gorm:"not null;default:0"`             //测试模式 (0:default，1:spj，2:interactive,3:Leetcode)
-	Show_id          string    ``                                      //题目显示ID
-	Title            string    `gorm:"not null;index:,class:FULLTEXT"` //题目标题
-	Time_limit       int       `gorm:"not null;default:1000"`          //题目时限，单位ms
-	Memory_limit     int       `gorm:"not null;default:256"`           //题目内存限制，单位MB
-	Stack_limit      int       `gorm:"not null;default:128"`           //栈空间，默认128MB
-	Markdown         bool      `gorm:"not null;default:false"`         //是否存储MD文件，为true的时候在Description字段存储MD值，否则由以下六个字段共同组合
-	BackGround       string    ``                                      //题目背景
-	Description      string    ``                                      //题目描述
-	Input            string    ``                                      //输入描述
-	Output           string    ``                                      //输出描述
-	Examples         string    ``                                      //题目样例，json格式，[{input: , output: ,descrption:},{input:, output: ,descrption:},...] ，允许有多个样例
-	Hint             string    ``                                      //题目提示
-	CaseFiles        string    ``                                      //测试数据文件名
-	Source           string    ``                                      //题目来源(hduoj、vj...)
-	Owner            int       ``                                      //题目创建者，为0时任何用户都允许访问，为1时仅管理员用户可访问，其他数字则只有对应用户可以访问
-	Code_share       bool      `gorm:"default:false"`                  //是否允许共享代码
-	Spj_language     string    `gorm:"not null"`                       //Spj的代码语言
-	Case_version     uint      `gorm:"default:1"`                      //测试用例版本，可用于题目重测
-	Open_case_result bool      ``                                      //是否公开测试用例
-	Modified_user    string    ``                                      //最后修改的用户
-	CreatedAt        time.Time ``                                      //创建时间
-	UpdatedAt        time.Time ``                                      //修改时间
+	ID               uint                `gorm:"primaryKey"`                     //题目编号
+	Judge_mode       byte                `gorm:"not null;default:0"`             //测试模式 (0:default，1:spj，2:interactive,3:Leetcode)
+	Show_id          string              ``                                      //题目显示ID
+	Title            string              `gorm:"not null;index:,class:FULLTEXT"` //题目标题
+	Time_limit       int                 `gorm:"not null;default:1000"`          //题目时限，单位ms
+	Memory_limit     int                 `gorm:"not null;default:256"`           //题目内存限制，单位MB
+	Stack_limit      int                 `gorm:"not null;default:128"`           //栈空间，默认128MB
+	Description      Problem_Description `gorm:"foreignKey:DID"`                 //
+	DID              uint                ``                                      //题面编号
+	Source           string              ``                                      //题目来源(hduoj、vj...)
+	Owner            int                 ``                                      //题目创建者，为0时任何用户都允许访问，为1时仅管理员用户可访问，其他数字则只有对应用户可以访问
+	Code_share       bool                `gorm:"default:false"`                  //是否允许共享代码
+	Spj_language     string              `gorm:"not null"`                       //Spj的代码语言
+	Case_version     uint                `gorm:"default:1"`                      //测试用例版本，可用于题目重测
+	Open_case_result bool                ``                                      //是否公开测试用例
+	SubmitNumber     int                 ``                                      //提交次数
+	SubmitACNumber   int                 ``                                      //AC数
+	Modified_user    string              ``                                      //最后修改的用户
+	CreatedAt        time.Time           ``                                      //创建时间
+	UpdatedAt        time.Time           ``                                      //修改时间
 }
 
 type Judge struct {
@@ -92,17 +100,19 @@ type Contest struct {
 }
 
 type Contest_problem struct {
-	ID        uint      `gorm:"primaryKey"`     //比赛题目ID
-	Show_ID   string    ``                      //显示ID
-	Contest   Contest   `gorm:"foreignKey:CID"` //
-	CID       uint      `gorm:"index"`          //比赛ID
-	Problem   Problem   `gorm:"foreignKey:PID"` //
-	PID       uint      ``                      //题目ID
-	Title     string    ``                      //题目标题
-	Color     string    ``                      //题目气球颜色
-	Score     string    ``                      //题目分数，在OI赛制和CF赛制下有意义
-	CreatedAt time.Time ``                      //创建时间
-	UpdatedAt time.Time ``                      //修改时间
+	ID             uint      `gorm:"primaryKey"`     //比赛题目ID
+	Show_ID        string    ``                      //显示ID
+	Contest        Contest   `gorm:"foreignKey:CID"` //
+	CID            uint      `gorm:"index"`          //比赛ID
+	Problem        Problem   `gorm:"foreignKey:PID"` //
+	PID            uint      ``                      //题目ID
+	Title          string    ``                      //题目标题
+	Color          string    ``                      //题目气球颜色
+	Score          string    ``                      //题目分数，在OI赛制和CF赛制下有意义
+	SubmitNumber   int       ``                      //提交数
+	SubmitACNumber int       ``                      //AC数
+	CreatedAt      time.Time ``                      //创建时间
+	UpdatedAt      time.Time ``                      //修改时间
 }
 
 type Contest_register struct {
