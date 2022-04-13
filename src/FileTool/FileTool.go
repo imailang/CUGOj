@@ -37,8 +37,10 @@ func ReadCases(basePath string) ([]string, error) {
 	mp := make(map[string]int)
 	for _, f := range fs {
 		if !f.IsDir() {
-			if ext := path.Ext(f.Name()); ext == "in" || ext == "out" {
-				mp[path.Base(f.Name())]++
+			ext := path.Ext(f.Name())
+			if ext == ".in" || ext == ".out" {
+				name := f.Name()[:len(f.Name())-len(ext)]
+				mp[name]++
 			}
 		}
 	}

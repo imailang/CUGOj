@@ -7,19 +7,19 @@ import (
 )
 
 func RabbitMQConn() (*amqp.Connection, error) {
-	user, err := properties.Get("user")
+	user, err := properties.Get("QuUser")
 	if err != nil {
 		return nil, err
 	}
-	pwd, err := properties.Get("password")
+	pwd, err := properties.Get("QuPassword")
 	if err != nil {
 		return nil, err
 	}
-	host, err := properties.Get("host")
+	host, err := properties.Get("QuHost")
 	if err != nil {
 		return nil, err
 	}
-	port, err := properties.Get("port")
+	port, err := properties.Get("QuPort")
 	if err != nil {
 		return nil, err
 	}

@@ -32,8 +32,8 @@ type Problem struct {
 	Spj_language     string              `gorm:"not null"`                       //Spj的代码语言
 	Case_version     uint                `gorm:"default:1"`                      //测试用例版本，可用于题目重测
 	Open_case_result bool                ``                                      //是否公开测试用例
-	SubmitNumber     int                 ``                                      //提交次数
-	SubmitACNumber   int                 ``                                      //AC数
+	Submit_Number    int                 ``                                      //提交次数
+	Submit_ACNumber  int                 ``                                      //AC数
 	Modified_user    string              ``                                      //最后修改的用户
 	CreatedAt        time.Time           ``                                      //创建时间
 	UpdatedAt        time.Time           ``                                      //修改时间
@@ -100,19 +100,19 @@ type Contest struct {
 }
 
 type Contest_problem struct {
-	ID             uint      `gorm:"primaryKey"`     //比赛题目ID
-	Show_ID        string    ``                      //显示ID
-	Contest        Contest   `gorm:"foreignKey:CID"` //
-	CID            uint      `gorm:"index"`          //比赛ID
-	Problem        Problem   `gorm:"foreignKey:PID"` //
-	PID            uint      ``                      //题目ID
-	Title          string    ``                      //题目标题
-	Color          string    ``                      //题目气球颜色
-	Score          string    ``                      //题目分数，在OI赛制和CF赛制下有意义
-	SubmitNumber   int       ``                      //提交数
-	SubmitACNumber int       ``                      //AC数
-	CreatedAt      time.Time ``                      //创建时间
-	UpdatedAt      time.Time ``                      //修改时间
+	ID              uint      `gorm:"primaryKey"`     //比赛题目ID
+	Show_ID         string    ``                      //显示ID
+	Contest         Contest   `gorm:"foreignKey:CID"` //
+	CID             uint      `gorm:"index"`          //比赛ID
+	Problem         Problem   `gorm:"foreignKey:PID"` //
+	PID             uint      ``                      //题目ID
+	Title           string    ``                      //题目标题
+	Color           string    ``                      //题目气球颜色
+	Score           string    ``                      //题目分数，在OI赛制和CF赛制下有意义
+	Submit_Number   int       ``                      //提交数
+	Submit_ACNumber int       ``                      //AC数
+	CreatedAt       time.Time ``                      //创建时间
+	UpdatedAt       time.Time ``                      //修改时间
 }
 
 type Contest_register struct {

@@ -11,5 +11,9 @@
     "ContainerName": "runc",
     "MaxIdleConns": "10",
     "MaxOpenConns": "1000",
-    "MaxLifeTime": "3600"
+    "MaxLifeTime": "3600",
+    "QuUser": "cugoj",
+    "QuPassword": "cugoj2022",
+    "QuHost": "1.15.93.80",
+    "QuPort": "5672"
 }

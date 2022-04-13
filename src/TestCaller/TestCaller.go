@@ -20,7 +20,7 @@ type FileMap struct {
 	DesPath string
 }
 
-func Test(configPath, judgerName string, args ...string) TestInfo {
+func Test(configPath, judgerName string) TestInfo {
 	fmt.Println(properties.GetAnyway("ContainerName") + " run -b " + configPath + " " + judgerName)
 	cmd := exec.Command(properties.GetAnyway("ContainerName"),
 		"run",

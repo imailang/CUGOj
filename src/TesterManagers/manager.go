@@ -50,7 +50,7 @@ func (m *Manager) showError(err error) {
 	fmt.Println(err)
 }
 
-func (m *Manager) run() {
+func (m *Manager) Run() {
 	conn, err := queuetool.RabbitMQConn()
 	if err != nil {
 		m.showError(err)
@@ -64,7 +64,7 @@ func (m *Manager) run() {
 	}
 	defer ch.Close()
 	q, err := ch.QueueDeclare(
-		"test",
+		"judge",
 		true,
 		false,
 		false,
@@ -97,12 +97,12 @@ func (m *Manager) run() {
 		m.showError(err)
 		return
 	}
-	for msg := range msgs {
-		if m.Signal_kill {
-			break
-		}
+	for !m.Signal_kill {
+		msg := <-msgs
 		judge := sqltool.QueryJudge(string(msg.Body))
 		Run(&judge, m)
+		msg.Ack(true)
+		m.Signal_kill = true
 	}
 
 }

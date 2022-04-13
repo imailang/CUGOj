@@ -121,3 +121,7 @@ func (config *BundleConfig) SetMount(src, des string, readonly bool) {
 	}
 	config.Mounts = append(config.Mounts, mount)
 }
+
+func (config *BundleConfig) SetEntry(args ...string) {
+	config.Process.Args = args
+}
