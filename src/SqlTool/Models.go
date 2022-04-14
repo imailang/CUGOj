@@ -23,7 +23,7 @@ type Problem struct {
 	Title            string              `gorm:"not null;index:,class:FULLTEXT"` //题目标题
 	Time_limit       int                 `gorm:"not null;default:1000"`          //题目时限，单位ms
 	Memory_limit     int                 `gorm:"not null;default:256"`           //题目内存限制，单位MB
-	Stack_limit      int                 `gorm:"not null;default:128"`           //栈空间，默认128MB
+	Stack_limit      int                 `gorm:"not null;default:128"`           //栈空间，默认512MB
 	Description      Problem_Description `gorm:"foreignKey:DID"`                 //
 	DID              uint                ``                                      //题面编号
 	Source           string              ``                                      //题目来源(hduoj、vj...)
@@ -56,7 +56,7 @@ type Judge struct {
 	Length        int       ``                      //代码长度
 	Code          string    ``                      //代码
 	Language      string    ``                      //语言
-	Judger        string    ``                      //评测机IP
+	Judger        string    ``                      //评测机
 	Ip            string    ``                      //用户IP
 	CID           uint      ``                      //比赛ID
 	Version       uint      ``                      //评测版本

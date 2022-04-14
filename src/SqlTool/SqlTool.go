@@ -89,3 +89,7 @@ func QueryJudge(JudgeID string) Judge {
 func SaveJudge(judge *Judge) {
 	db.Save(judge)
 }
+
+func CreateJudgeCases(judegCases *[]Judge_case) {
+	db.Create(judegCases)
+}

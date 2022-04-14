@@ -2,7 +2,11 @@ module TMManager
 
 go 1.18
 
-require github.com/streadway/amqp v1.0.0
+require (
+	github.com/go-chi/chi v1.5.4
+	github.com/liushuochen/gotable v0.0.0-20220408160921-3255800d3de2
+	github.com/streadway/amqp v1.0.0
+)
 
 require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
