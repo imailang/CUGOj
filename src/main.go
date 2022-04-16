@@ -1,10 +1,10 @@
 package main
 
 import (
-	judgemanager "TMManager/src/JudgeManager"
-	nettool "TMManager/src/NetTool"
-	properties "TMManager/src/Properties"
-	sqltool "TMManager/src/SqlTool"
+	judgemanager "CUGOj/src/JudgeManager"
+	nettool "CUGOj/src/NetTool"
+	properties "CUGOj/src/Properties"
+	sqltool "CUGOj/src/SqlTool"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"

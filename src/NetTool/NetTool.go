@@ -1,7 +1,7 @@
 package nettool
 
 import (
-	judgemanager "TMManager/src/JudgeManager"
+	judgemanager "CUGOj/src/JudgeManager"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -23,7 +23,7 @@ var Api = map[string]func(http.ResponseWriter, *http.Request){
 	"/pid":    Pid,
 }
 
-func Status(w http.ResponseWriter, r *http.Request) {
+func Status(w http.ResponseWriter, _ *http.Request) {
 	res := StatusModal{
 		Judgers: judgemanager.Status(),
 		Statu:   judgemanager.Info(),
@@ -32,12 +32,12 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	w.Write(buf)
 }
 
-func Stop(w http.ResponseWriter, r *http.Request) {
+func Stop(w http.ResponseWriter, _ *http.Request) {
 	w.Write([]byte(judgemanager.Stop()))
 	judgemanager.Wg.Done()
 }
 
-func Pid(w http.ResponseWriter, r *http.Request) {
+func Pid(w http.ResponseWriter, _ *http.Request) {
 	w.Write([]byte(fmt.Sprint(os.Getpid())))
 }
 
@@ -50,12 +50,12 @@ func Run() {
 	http.ListenAndServe("localhost:13001", r)
 }
 
-func Stopd(w http.ResponseWriter, r *http.Request) {
+func Stopd(_ http.ResponseWriter, _ *http.Request) {
 	Signal_Stopd = true
 	http.Get("http://localhost:13001/stop")
 }
 
-func Pidd(w http.ResponseWriter, r *http.Request) {
+func Pidd(w http.ResponseWriter, _ *http.Request) {
 	w.Write([]byte(fmt.Sprint(os.Getpid())))
 }
 func Rund() {

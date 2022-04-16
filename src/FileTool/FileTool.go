@@ -65,6 +65,6 @@ func ReadFile(path string) ([]byte, error) {
 }
 
 func Home() string {
-	return "/code/TMManager/"
+	return "/code/CUGOj/"
 	//return os.Getenv("CUGOJ_HOME")
 }

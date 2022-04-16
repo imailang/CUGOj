@@ -1,2 +1,2 @@
-# TMManager
+# CUGOj
 TestMachine Manager of CUGOJ

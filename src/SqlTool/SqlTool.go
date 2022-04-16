@@ -1,7 +1,7 @@
 package sqltool
 
 import (
-	properties "TMManager/src/Properties"
+	properties "CUGOj/src/Properties"
 	"database/sql"
 	"fmt"
 	"time"
@@ -65,14 +65,14 @@ func CreateTables() error {
 	err := db.AutoMigrate(
 		&Problem{},
 		&Judge{},
-		&Judge_case{},
+		&JudgeCase{},
 		&Contest{},
-		&Contest_problem{},
-		&Contest_register{},
-		&Contest_record{},
-		&Contest_judge{},
-		&Contest_judge_case{},
-		&User_info{},
+		&ContestProblem{},
+		&ContestRegister{},
+		&ContestRecord{},
+		&ContestJudge{},
+		&ContestJudgeCase{},
+		&UserInfo{},
 	)
 	if err == nil {
 		fmt.Println("数据库表初始化成功")
@@ -90,6 +90,28 @@ func SaveJudge(judge *Judge) {
 	db.Save(judge)
 }
 
-func CreateJudgeCases(judegCases *[]Judge_case) {
+func CreateJudgeCases(judegCases *[]JudgeCase) {
 	db.Create(judegCases)
+	if db.Error != nil {
+		fmt.Println(db.Error)
+	}
+}
+
+func AddSubmit(id uint, ac bool) {
+	cnt := int64(0)
+	for cnt == 0 {
+		db.Transaction(func(tx *gorm.DB) error {
+			problem := Problem{}
+			tx.First(&problem, id)
+
+			problem.SubmitNumber++
+			if ac {
+				problem.SubmitACNumber++
+			}
+
+			cnt = tx.Updates(&problem).RowsAffected
+
+			return nil
+		})
+	}
 }

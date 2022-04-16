@@ -1,17 +1,17 @@
 package judegemanager
 
 import (
-	filetool "TMManager/src/FileTool"
-	properties "TMManager/src/Properties"
-	sqltool "TMManager/src/SqlTool"
-	testcaller "TMManager/src/TestCaller"
+	filetool "CUGOj/src/FileTool"
+	properties "CUGOj/src/Properties"
+	sqltool "CUGOj/src/SqlTool"
+	testcaller "CUGOj/src/TestCaller"
 	"encoding/json"
 	"fmt"
 	"strings"
 )
 
 func Run(judge *sqltool.Judge, manager *Manager) {
-	switch judge.Problem.Judge_mode {
+	switch judge.Problem.JudgeMode {
 	case 0:
 		DefualtRun(judge, manager)
 	}
@@ -36,7 +36,7 @@ var exts = map[string]string{
 	"cpp20": ".cpp",
 }
 
-func DefualtRun(judge *sqltool.Judge, manager *Manager) []sqltool.Judge_case {
+func DefualtRun(judge *sqltool.Judge, manager *Manager) []sqltool.JudgeCase {
 	judge.Status = "Compiling"
 	judge.Judger = manager.Name
 	sqltool.SaveJudge(judge)
@@ -46,11 +46,11 @@ func DefualtRun(judge *sqltool.Judge, manager *Manager) []sqltool.Judge_case {
 	strs := strings.Split(judge.Language, " ")
 	if len(strs) != 2 {
 		judge.Status = "CE"
-		judge.Error_message = "语言选择存在问题"
-		judge.Time_use = int(0)
-		judge.Memory_use = int(0)
+		judge.ErrorMessage = "语言选择存在问题"
+		judge.TimeUse = int(0)
+		judge.MemoryUse = int(0)
 		sqltool.SaveJudge(judge)
-		return []sqltool.Judge_case{}
+		return []sqltool.JudgeCase{}
 	}
 	language := strs[0]
 	version := strs[1]
@@ -73,25 +73,25 @@ func DefualtRun(judge *sqltool.Judge, manager *Manager) []sqltool.Judge_case {
 
 	if res.Statu == "007" {
 		judge.Status = "CE"
-		judge.Error_message = res.Info
-		judge.Time_use = int(res.RunTime)
-		judge.Memory_use = int(res.Memory)
+		judge.ErrorMessage = res.Info
+		judge.TimeUse = int(res.RunTime)
+		judge.MemoryUse = int(res.Memory)
 		sqltool.SaveJudge(judge)
-		return []sqltool.Judge_case{}
+		return []sqltool.JudgeCase{}
 	} else if res.Statu == "017" {
 		judge.Status = "SE"
-		judge.Error_message = res.Info
-		judge.Time_use = int(res.RunTime)
-		judge.Memory_use = int(res.Memory)
+		judge.ErrorMessage = res.Info
+		judge.TimeUse = int(res.RunTime)
+		judge.MemoryUse = int(res.Memory)
 		sqltool.SaveJudge(judge)
-		return []sqltool.Judge_case{}
+		return []sqltool.JudgeCase{}
 	}
 	cases, err := filetool.ReadCases(casePath)
 	if err != nil {
 		judge.Status = "SE"
-		judge.Error_message = err.Error()
+		judge.ErrorMessage = err.Error()
 		sqltool.SaveJudge(judge)
-		return []sqltool.Judge_case{}
+		return []sqltool.JudgeCase{}
 	}
 
 	judge.Status = "Running"
@@ -99,34 +99,36 @@ func DefualtRun(judge *sqltool.Judge, manager *Manager) []sqltool.Judge_case {
 
 	config.SetMount(casePath, "/test/cases/", true)
 
-	judge_cases := make([]sqltool.Judge_case, len(cases))
+	judgeCases := make([]sqltool.JudgeCase, len(cases))
 
 	judge.Status = "010"
 	for i, ca := range cases {
-		config.SetEntry("cugtm", language, version, "run", "/test/workspace/main", fmt.Sprint(judge.Problem.Time_limit), fmt.Sprint(judge.Problem.Memory_limit), "/test/cases/"+ca)
+		config.SetEntry("cugtm", language, version, "run", "/test/workspace/main", fmt.Sprint(judge.Problem.TimeLimit), fmt.Sprint(judge.Problem.MemoryLimit), "/test/cases/"+ca)
 		buf, _ = json.Marshal(&config)
 		filetool.WriteFileB(configPath, buf)
 		testRes := testcaller.Test(manager.WorkSpace, manager.Name)
-		judge_cases[i].JID = judge.ID
-		judge_cases[i].Status = testRes.Statu
-		judge_cases[i].Time_use = int(testRes.RunTime)
-		judge_cases[i].Memory_use = int(testRes.Memory)
-		judge_cases[i].Case_id = i + 1
-		if testRes.RunTime > judge.Time_use {
-			judge.Time_use = int(testRes.RunTime)
+		judgeCases[i].JID = judge.ID
+		judgeCases[i].Status = testRes.Statu
+		judgeCases[i].TimeUse = int(testRes.RunTime)
+		judgeCases[i].MemoryUse = int(testRes.Memory)
+		judgeCases[i].CaseId = i + 1
+		if testRes.RunTime > judge.TimeUse {
+			judge.TimeUse = int(testRes.RunTime)
 		}
-		if testRes.Memory > judge.Memory_use {
-			judge.Memory_use = testRes.Memory
+		if testRes.Memory > judge.MemoryUse {
+			judge.MemoryUse = testRes.Memory
 		}
 		if judge.Status == "010" && testRes.Statu != "010" {
 			judge.Status = testRes.Statu
-			judge.Error_message = testRes.Info
+			judge.ErrorMessage = testRes.Info
 		}
 	}
 	judge.Status = statusMap[judge.Status]
 	sqltool.SaveJudge(judge)
-	sqltool.CreateJudgeCases(&judge_cases)
-	return judge_cases
+	sqltool.CreateJudgeCases(&judgeCases)
+	sqltool.AddSubmit(judge.PID, judge.Status == "AC")
+
+	return judgeCases
 }
 
 // "cugtm",

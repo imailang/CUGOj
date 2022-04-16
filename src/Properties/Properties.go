@@ -1,7 +1,7 @@
 package properties
 
 import (
-	filetool "TMManager/src/FileTool"
+	filetool "CUGOj/src/FileTool"
 	"encoding/json"
 	"io/ioutil"
 	"strconv"

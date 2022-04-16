@@ -1,7 +1,7 @@
 package testcaller
 
 import (
-	properties "TMManager/src/Properties"
+	properties "CUGOj/src/Properties"
 	"bytes"
 	"encoding/json"
 	"fmt"

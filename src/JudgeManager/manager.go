@@ -1,10 +1,10 @@
 package judegemanager
 
 import (
-	filetool "TMManager/src/FileTool"
-	queuetool "TMManager/src/QueueTool"
-	sqltool "TMManager/src/SqlTool"
-	testcaller "TMManager/src/TestCaller"
+	filetool "CUGOj/src/FileTool"
+	queuetool "CUGOj/src/QueueTool"
+	sqltool "CUGOj/src/SqlTool"
+	testcaller "CUGOj/src/TestCaller"
 	"encoding/json"
 	"fmt"
 	"os"

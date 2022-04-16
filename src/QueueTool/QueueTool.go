@@ -1,7 +1,7 @@
 package queuetool
 
 import (
-	properties "TMManager/src/Properties"
+	properties "CUGOj/src/Properties"
 
 	"github.com/streadway/amqp"
 )
